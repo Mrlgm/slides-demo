@@ -12,27 +12,10 @@
 }
 
 .images {
-    position: relative;
+    display: flex;
+    transition: all 0.3s;
 }
 
 .images>img {
     width: 100%;
-    transition: all 0.3s;
-    position: absolute;
-    top: 0;
-}
-
-.images>img.current{
-    left: 0;
-    transform: translate(0);
-    z-index: 1;
-}
-
-.images>img.leave{
-    transform: translate(-100%);
-    z-index: 1;
-}
-
-.images>img.enter{
-    transform: translate(100%);
 }

@@ -1,28 +1,46 @@
-let n
-initialize()
+let $buttons = $('#buttonWrapper>button')
+//console.log($buttons)
+let $slides = $('#slides')
+let $images = $slides.children('img')
+let current = 0
+//console.log($images)
 
-let size = 3
+makeFakeSlides()
 
+$slides.css({
+    transform: 'translate(-100%)'
+})
+
+bindEvents()
+
+$('#previous').on('click', function () {
+    goToSlide(current - 1)
+})
+
+$('#next').on('click', function () {
+    goToSlide(current + 1)
+})
 
 let timerId = setInterval(() => {
-    makeLeave(getImage(n)).one('transitionend', (e) => {
-        makeEnter($(e.currentTarget))
-    })
-    n = (n % size) + 1 //1~3，并且加1
-    makeCurrent(getImage(n))
-}, 3000)
+    goToSlide(current + 1)
+}, 2000)
 
-document.addEventListener('visibilitychange', function (e) {
+$('.container').on('mouseenter', function () {
+    window.clearInterval(timerId)
+})
+$('.container').on('mouseleave', function () {
+    timerId = setInterval(() => {
+        goToSlide(current + 1)
+    }, 2000)
+})
+
+document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
         window.clearInterval(timerId)
     } else {
         timerId = setInterval(() => {
-            makeLeave(getImage(n)).one('transitionend', (e) => {
-                makeEnter($(e.currentTarget))
-            })
-            n = (n % size) + 1 //1~3，并且加1
-            makeCurrent(getImage(n))
-        }, 3000)
+            goToSlide(current + 1)
+        }, 2000)
     }
 })
 
@@ -31,93 +49,101 @@ document.addEventListener('visibilitychange', function (e) {
 
 
 
-/* function x(n) {
-    if (n > 3) {
-        n = n % 3
-        if (n === 0) {
-            n = 1
-        }
+
+
+function bindEvents() {
+
+    $('#buttonWrapper').on('click', 'button', function (e) {
+        let $button = $(e.currentTarget)
+        let index = $button.index()
+        goToSlide(index)
+    })
+}
+
+function goToSlide(index) {
+    if (index < 0) {
+        index = $buttons.length - 1
+    } else if (index > $buttons.length - 1) {
+        index = 0
     }
-    return n
-} */
-
-function initialize() {
-    n = 1
-    $('.images>img:nth-child(1)').addClass('current')
-    $('.images>img:nth-child(2)').addClass('enter')
-    $('.images>img:nth-child(3)').addClass('enter')
-}
-
-function makeCurrent($node) {
-    return $node.removeClass('enter leave').addClass('current')
-}
-
-function makeLeave($node) {
-    return $node.removeClass('current').addClass('leave')
-}
-
-function makeEnter($node) {
-    return $node.removeClass('leave').addClass('enter')
-}
-
-function getImage(n) {
-    return $('.images>img:nth-child(' + n + ')')
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* setTimeout(() => {
-    $('.images>img:nth-child(1)').css({
-        transform: 'translate(-100%)'
-    })
-    $('.images>img:nth-child(2)').css({
-        transform: 'translate(-100%)'
-    })
-    $('.images>img:nth-child(1)').one('transitionend', function (e) {
-        console.log(e.currentTarget)
-        $(e.currentTarget) .addClass('right').css({
-            transform: 'none'
+    if (current === $buttons.length - 1 && index === 0) {
+        console.log(1)
+        $slides.css({
+            transform: 'translate(' + (($buttons.length + 1) * -100) + '%)'
+        }).one('transitionend', function () {
+            $slides.hide().css({
+                transform: 'translate(' + ((index + 1) * -100) + '%)'
+            }).offset()
+            $slides.show()
         })
-    })
-
-}, 3000)
-
-setTimeout(()=>{
-    $('.images>img:nth-child(2)').css({
-        transform:'translate(-200%)'
-    })
-    $('.images>img:nth-child(3)').css({
-        transform:'translate(-100%)'
-    })
-    $('.images>img:nth-child(2)').one('transitionend', function (e) {
-        console.log(e.currentTarget)
-        $(e.currentTarget) .addClass('right').css({
-            transform: 'none'
+        current = index
+    } else if (current === 0 && index === $buttons.length - 1) {
+        console.log(2)
+        $slides.css({
+            transform: 'translate(0)'
+        }).one('transitionend', function () {
+            $slides.hide().css({
+                transform: 'translate(' + ((index + 1) * -100) + '%)'
+            }).offset()
+            $slides.show()
         })
-    })
-},6000)
-
-setTimeout(()=>{
-    $('.images>img:nth-child(3)').css({
-        transform:'translate(-200%)'
-    })
-    $('.images>img:nth-child(1)').css({
-        transform:'translate(-100%)'
-    })
-    $('.images>img:nth-child(3)').one('transitionend', function (e) {
-        console.log(e.currentTarget)
-        $(e.currentTarget) .addClass('right').css({
-            transform: 'none'
+        current = index
+    } else {
+        $slides.css({
+            transform: 'translate(' + ((index + 1) * -100) + '%)'
         })
+        current = index
+    }
+}
+
+/* $($buttons[0]).on('click', function () {
+    if (current === 2) {
+        $slides.css({
+            transform: 'translate(-400%)'
+        }).one('transitionend', function () {
+            $slides.hide().css({
+                transform: 'translate(-100%)'
+            }).offset()
+            $slides.show()
+        })
+    } else {
+        $slides.css({
+            transform: 'translate(-100%)'
+        })
+    }
+
+    current = 0
+})
+$($buttons[1]).on('click', function () {
+    $slides.css({
+        transform: 'translate(-200%)'
     })
-},9000) */
+    current = 1
+})
+$($buttons[2]).on('click', function () {
+    if (current === 0) {
+        $slides.css({
+            transform: 'translate(0)'
+        }).one('transitionend', function () {
+            $slides.hide().css({
+                transform: 'translate(-300%)'
+            }).offset()
+            $slides.show()
+        })
+    } else {
+        $slides.css({
+            transform: 'translate(-300%)'
+        })
+    }
+    current = 2
+}) */
+
+
+
+function makeFakeSlides() {
+    let $firstCopy = $images.eq(0).clone(true) //$($images[0])
+    let $lastCopy = $images.eq($images.length - 1).clone(true) //$($images[$images.length - 1])
+
+    $slides.append($firstCopy)
+    $slides.prepend($lastCopy)
+}
