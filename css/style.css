@@ -28,7 +28,6 @@
     position: absolute;
     top:0px;
     left:50%;
-    transition: all 0.3s;
 }
 
 .controls>img:nth-child(1) {
@@ -45,7 +44,7 @@
 }
 .controls>img:nth-child(1):hover,
 .controls>img:nth-child(2):hover {
-    
+    transition: all 1s;
     opacity: 1;
 }
 
