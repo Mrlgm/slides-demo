@@ -1,4 +1,8 @@
 let $buttons = $('#buttonWrapper>button')
+let $imgs = $('#iconWrapper>img')
+console.log($imgs)
+console.log($imgs[0])
+
 //console.log($buttons)
 let $slides = $('#slides')
 let $images = $slides.children('img')
@@ -56,6 +60,8 @@ function bindEvents() {
     $('#buttonWrapper').on('click', 'button', function (e) {
         let $button = $(e.currentTarget)
         let index = $button.index()
+        console.log(index)
+
         goToSlide(index)
     })
 }
@@ -66,6 +72,10 @@ function goToSlide(index) {
     } else if (index > $buttons.length - 1) {
         index = 0
     }
+    for (let i = 0; i < $imgs.length; i++) {
+        $imgs.eq(i).removeClass('active')
+    }
+    $imgs.eq(index).addClass('active')
     if (current === $buttons.length - 1 && index === 0) {
         console.log(1)
         $slides.css({
@@ -94,6 +104,16 @@ function goToSlide(index) {
         })
         current = index
     }
+}
+
+function makeFakeSlides() {
+    let $firstCopy = $images.eq(0).clone(true) //$($images[0])
+    let $lastCopy = $images.eq($images.length - 1).clone(true) //$($images[$images.length - 1])
+
+
+    $imgs.eq(0).addClass('active')
+    $slides.append($firstCopy)
+    $slides.prepend($lastCopy)
 }
 
 /* $($buttons[0]).on('click', function () {
@@ -137,13 +157,3 @@ $($buttons[2]).on('click', function () {
     }
     current = 2
 }) */
-
-
-
-function makeFakeSlides() {
-    let $firstCopy = $images.eq(0).clone(true) //$($images[0])
-    let $lastCopy = $images.eq($images.length - 1).clone(true) //$($images[$images.length - 1])
-
-    $slides.append($firstCopy)
-    $slides.prepend($lastCopy)
-}

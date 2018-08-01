@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+.container {
+    position: relative;
+}
+
 .window {
     width: 400px;
     height: 300px;
@@ -18,4 +22,49 @@
 
 .images>img {
     width: 100%;
+}
+
+.controls {
+    position: absolute;
+    top:0px;
+    left:50%;
+    transition: all 0.3s;
+}
+
+.controls>img:nth-child(1) {
+    position: absolute;
+    top: 100px;
+    right: 120px;
+    opacity: 0.2;
+}
+.controls>img:nth-child(2) {
+    position: absolute;
+    top: 100px;
+    left: 120px;
+    opacity: 0.2;
+}
+.controls>img:nth-child(1):hover,
+.controls>img:nth-child(2):hover {
+    
+    opacity: 1;
+}
+
+.iconWrapper {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.iconWrapper>img:nth-child(1).active {
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.iconWrapper>img:nth-child(2).active {
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.iconWrapper>img:nth-child(3).active {
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
